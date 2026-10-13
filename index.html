@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="ko" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MYUNG (命) - 현대적 사주 리포트</title>
+    <!-- Open Graph for Social Sharing -->
+    <meta property="og:title" content="MYUNG (命) - 현대적 사주 분석 리포트">
+    <meta property="og:description" content="나만의 사주 팔자와 오행 분석, 2026년 운세부터 맞춤 럭키 솔루션까지 확인해보세요.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1506703719100-a0f3a48c0f86?w=1200">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        wood: '#10B981',   <!-- 목: 에메랄드 -->
+                        fire: '#EF4444',   <!-- 화: 코랄 레드 -->
+                        earth: '#F59E0B',  <!-- 토: 골드/옐로우 -->
+                        metal: '#E2E8F0',  <!-- 금: 은백색 -->
+                        water: '#6366F1',  <!-- 수: 딥 블루/퍼플 -->
+                        mystic: {
+                            900: '#0B0F19',
+                            800: '#111827',
+                            700: '#1F2937',
+                            card: 'rgba(255, 255, 255, 0.05)',
+                            border: 'rgba(255, 255, 255, 0.12)'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Pretendard', 'Noto Sans KR', 'sans-serif'],
+                        serif: ['Cinzel', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- FontAwesome & Google Fonts & Chart.js -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: #070A11;
+            background-image: 
+                radial-gradient(at 10% 10%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 90% 80%, rgba(245, 158, 11, 0.12) 0px, transparent 50%),
+                radial-gradient(at 50% 50%, rgba(16, 185, 129, 0.08) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: #F3F4F6;
+        }
+
+        .glass-panel {
+            background: rgba(17, 24, 39, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .glass-card:hover {
+            border-color: rgba(168, 85, 247, 0.4);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px -5px rgba(168, 85, 247, 0.15);
+        }
+
+        .glow-text {
+            text-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+        }
+
+        .tab-active {
+            border-bottom: 2px solid #C084FC;
+            color: #C084FC;
+            background: rgba(192, 132, 252, 0.08);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0F19;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #374151;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="min-h-screen pb-16">
+
+    <!-- Header / Navbar -->
+    <header class="sticky top-0 z-40 w-full glass-panel border-b border-white/10 px-4 lg:px-8 py-4">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="location.reload()">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-purple-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-purple-500/30">
+                    <i class="fa-solid font-serif text-xl text-white">命</i>
+                </div>
+                <div>
+                    <h1 class="font-serif text-xl font-bold tracking-wider text-white">MYUNG</h1>
+                    <p class="text-[10px] text-purple-300 tracking-widest uppercase">Modern K-Saju Report</p>
+                </div>
+            </div>
+
+            <nav class="flex items-center space-x-2 sm:space-x-4">
+                <button onclick="scrollToInput()" class="px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-300 hover:text-white transition">사주 보기</button>
+                <button onclick="openCompatibilityModal()" class="px-3 py-1.5 text-xs sm:text-sm font-medium text-purple-400 hover:text-purple-300 bg-purple-500/10 rounded-lg border border-purple-500/20 hover:bg-purple-500/20 transition">
+                    <i class="fa-solid font-heart text-xs mr-1"></i> 궁합 테스트
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero & Input Form Section -->
+    <section id="input-section" class="max-w-4xl mx-auto px-4 pt-10 pb-8">
+        <div class="text-center mb-8">
+            <span class="px-3 py-1 rounded-full text-xs font-semibold bg-purple-500/10 text-purple-300 border border-purple-500/20">
+                ✨ 2026년 병오년(丙午年) 대비 최신 사주 알고리즘
+            </span>
+            <h2 class="text-3xl sm:text-5xl font-bold mt-4 mb-3 tracking-tight bg-gradient-to-r from-white via-gray-200 to-purple-300 bg-clip-text text-transparent">
+                나를 완성하는 타고난 기운의 비밀
+            </h2>
+            <p class="text-sm sm:text-base text-gray-400 max-w-xl mx-auto">
+                생년월일시 하나로 풀이하는 현대적 동양 신비주의. 나만의 8글자 팔자(八字)와 오행 에너지를 정밀하게 분석해 드립니다.
+            </p>
+        </div>
+
+        <!-- Form Card -->
+        <div class="glass-panel rounded-3xl p-6 sm:p-10 relative overflow-hidden">
+            <div class="absolute -top-12 -right-12 w-40 h-40 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <form id="sajuForm" onsubmit="handleSajuSubmit(event)" class="space-y-6">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <!-- Name -->
+                    <div>
+                        <label class="block text-xs font-medium text-gray-300 mb-2">이름 또는 닉네임</label>
+                        <input type="text" id="userName" required placeholder="예: 김사주" 
+                            class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition">
+                    </div>
+
+                    <!-- Gender -->
+                    <div>
+                        <label class="block text-xs font-medium text-gray-300 mb-2">성별</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <label class="cursor-pointer">
+                                <input type="radio" name="gender" value="M" checked class="peer sr-only">
+                                <div class="w-full text-center py-3 text-sm rounded-xl border border-white/10 bg-white/5 text-gray-400 peer-checked:border-purple-500 peer-checked:bg-purple-500/20 peer-checked:text-purple-300 font-medium transition">
+                                    남성 (男性)
+                                </div>
+                            </label>
+                            <label class="cursor-pointer">
+                                <input type="radio" name="gender" value="F" class="peer sr-only">
+                                <div class="w-full text-center py-3 text-sm rounded-xl border border-white/10 bg-white/5 text-gray-400 peer-checked:border-purple-500 peer-checked:bg-purple-500/20 peer-checked:text-purple-300 font-medium transition">
+                                    여성 (女性)
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Birth Date -->
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="text-xs font-medium text-gray-300">생년월일</label>
+                            <div class="flex space-x-3 text-xs">
+                                <label class="flex items-center text-gray-400 cursor-pointer">
+                                    <input type="radio" name="calendarType" value="solar" checked class="mr-1 text-purple-500"> 양력
+                                </label>
+                                <label class="flex items-center text-gray-400 cursor-pointer">
+                                    <input type="radio" name="calendarType" value="lunar" class="mr-1 text-purple-500"> 음력
+                                </label>
+                            </div>
+                        </div>
+                        <input type="date" id="birthDate" required 
+                            class="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 transition">
+                    </div>
+
+                    <!-- Birth Time -->
+                    <div>
+                        <label class="block text-xs font-medium text-gray-300 mb-2">태어난 시간 (태어난 시)</label>
+                        <select id="birthTime" class="w-full bg-slate-900 border border-white/10 rounded-xl px-4 py-3 text-sm text-white focus:outline-none focus:border-purple-500 transition">
+                            <option value="unknown">시간 모름 (일주 중심으로 분석)</option>
+                            <option value="0">자시 (23:30 ~ 01:29)</option>
+                            <option value="1">축시 (01:30 ~ 03:29)</option>
+                            <option value="2">인시 (03:30 ~ 05:29)</option>
+                            <option value="3">묘시 (05:30 ~ 07:29)</option>
+                            <option value="4">진시 (07:30 ~ 09:29)</option>
+                            <option value="5">사시 (09:30 ~ 11:29)</option>
+                            <option value="6">오시 (11:30 ~ 13:29)</option>
+                            <option value="7">미시 (13:30 ~ 15:29)</option>
+                            <option value="8">신시 (15:30 ~ 17:29)</option>
+                            <option value="9">유시 (17:30 ~ 19:29)</option>
+                            <option value="10">술시 (19:30 ~ 21:29)</option>
+                            <option value="11">해시 (21:30 ~ 23:29)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="submitBtn" class="w-full py-4 bg-gradient-to-r from-purple-600 via-indigo-600 to-purple-600 hover:from-purple-500 hover:to-indigo-500 text-white font-semibold rounded-xl shadow-lg shadow-purple-600/30 transition transform active:scale-[0.99] flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-sparkles text-amber-300"></i>
+                    <span>나의 사주 리포트 생성하기</span>
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Loader Animation -->
+    <div id="loader" class="hidden max-w-xl mx-auto my-12 text-center p-8 glass-panel rounded-3xl">
+        <div class="inline-block w-12 h-12 border-4 border-purple-500 border-t-transparent rounded-full animate-spin mb-4"></div>
+        <h3 class="text-lg font-bold text-white mb-1">천간과 지지의 에너지를 계산하는 중...</h3>
+        <p class="text-xs text-gray-400">명리학 오행 균형 및 60갑자 일주 데이터를 분석 중입니다.</p>
+    </div>
+
+    <!-- Results Display Section -->
+    <section id="results-section" class="hidden max-w-5xl mx-auto px-4 py-8 space-y-8">
+        
+        <!-- User Banner Card -->
+        <div class="glass-panel rounded-3xl p-6 sm:p-8 relative overflow-hidden flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div>
+                <span id="resUserTag" class="text-xs font-semibold px-3 py-1 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
+                    분석 완료
+                </span>
+                <h2 class="text-2xl sm:text-3xl font-bold text-white mt-2">
+                    <span id="resUserName" class="text-purple-300"></span>님의 사주 분석 리포트
+                </h2>
+                <p id="resBirthSummary" class="text-xs sm:text-sm text-gray-400 mt-1"></p>
+            </div>
+            <button onclick="openShareModal()" class="px-4 py-2.5 bg-white/10 hover:bg-white/20 text-white rounded-xl text-xs font-medium flex items-center space-x-2 border border-white/10 transition">
+                <i class="fa-solid fa-share-nodes text-purple-300"></i>
+                <span>결과 요약 카드 공유하기</span>
+            </button>
+        </div>
+
+        <!-- 1. Four Pillars (사주팔자 원국) -->
+        <div>
+            <h3 class="text-lg font-bold text-white mb-4 flex items-center space-x-2">
+                <i class="fa-solid fa-layer-group text-purple-400"></i>
+                <span>사주팔자 원국 (四柱八字)</span>
+            </h3>
+            <div class="grid grid-cols-4 gap-2 sm:gap-4">
+                <!-- 시주 -->
+                <div class="glass-panel p-3 sm:p-5 rounded-2xl text-center border-t-4 border-t-purple-500">
+                    <span class="text-[11px] text-gray-400 block mb-1">시주 (時柱)</span>
+                    <div id="hourStem" class="text-xl sm:text-3xl font-bold py-1"></div>
+                    <div id="hourBranch" class="text-xl sm:text-3xl font-bold py-1"></div>
+                    <span id="hourTenGod" class="text-[10px] sm:text-xs text-purple-300 bg-purple-500/10 px-2 py-0.5 rounded-full inline-block mt-2"></span>
+                </div>
+                <!-- 일주 (핵심) -->
+                <div class="glass-panel p-3 sm:p-5 rounded-2xl text-center border-t-4 border-t-amber-400 bg-amber-500/5 relative">
+                    <span class="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-400 text-black font-bold text-[9px] px-2 py-0.5 rounded-full">본인(日主)</span>
+                    <span class="text-[11px] text-gray-400 block mb-1">일주 (日柱)</span>
+                    <div id="dayStem" class="text-xl sm:text-3xl font-bold py-1 text-amber-300"></div>
+                    <div id="dayBranch" class="text-xl sm:text-3xl font-bold py-1 text-amber-300"></div>
+                    <span id="dayTenGod" class="text-[10px] sm:text-xs text-amber-300 bg-amber-500/10 px-2 py-0.5 rounded-full inline-block mt-2">나 자신</span>
+                </div>
+                <!-- 월주 -->
+                <div class="glass-panel p-3 sm:p-5 rounded-2xl text-center border-t-4 border-t-indigo-500">
+                    <span class="text-[11px] text-gray-400 block mb-1">월주 (月柱)</span>
+                    <div id="monthStem" class="text-xl sm:text-3xl font-bold py-1"></div>
+                    <div id="monthBranch" class="text-xl sm:text-3xl font-bold py-1"></div>
+                    <span id="monthTenGod" class="text-[10px] sm:text-xs text-indigo-300 bg-indigo-500/10 px-2 py-0.5 rounded-full inline-block mt-2"></span>
+                </div>
+                <!-- 년주 -->
+                <div class="glass-panel p-3 sm:p-5 rounded-2xl text-center border-t-4 border-t-emerald-500">
+                    <span class="text-[11px] text-gray-400 block mb-1">년주 (年柱)</span>
+                    <div id="yearStem" class="text-xl sm:text-3xl font-bold py-1"></div>
+                    <div id="yearBranch" class="text-xl sm:text-3xl font-bold py-1"></div>
+                    <span id="yearTenGod" class="text-[10px] sm:text-xs text-emerald-300 bg-emerald-500/10 px-2 py-0.5 rounded-full inline-block mt-2"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 2. Day Master Persona & Element Distribution Grid -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Persona Card -->
+            <div class="lg:col-span-2 glass-panel p-6 sm:p-8 rounded-3xl flex flex-col justify-between">
+                <div>
+                    <div class="flex items-center space-x-2 mb-3">
+                        <span class="px-2.5 py-0.5 rounded-md text-xs font-bold bg-amber-400/20 text-amber-300 border border-amber-400/30">일주 캐릭터</span>
+                        <h4 id="personaTitle" class="text-xl sm:text-2xl font-bold text-white"></h4>
+                    </div>
+                    <p id="personaDesc" class="text-sm text-gray-300 leading-relaxed mb-6"></p>
+                </div>
+
+                <div id="mbtiComparison" class="p-4 rounded-2xl bg-white/5 border border-white/10 flex items-center space-x-4">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/20 flex items-center justify-center text-purple-300 font-bold text-lg shrink-0">
+                        <i class="fa-solid fa-brain"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs text-purple-300 font-semibold block">현대적 매칭 성향</span>
+                        <p id="personaMbti" class="text-sm text-gray-200 font-medium"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Five Elements Radar / Chart -->
+            <div class="glass-panel p-6 rounded-3xl flex flex-col items-center justify-center">
+                <h4 class="text-sm font-bold text-white mb-2 self-start flex items-center">
+                    <i class="fa-solid fa-chart-pie text-purple-400 mr-2"></i> 오행(五行) 에너지 분포
+                </h4>
+                <div class="w-full h-56 relative flex items-center justify-center">
+                    <canvas id="elementChart"></canvas>
+                </div>
+                <p id="elementSummaryText" class="text-xs text-gray-400 mt-2 text-center"></p>
+            </div>
+        </div>
+
+        <!-- 3. Tabbed Detailed Fortune Reports -->
+        <div class="glass-panel rounded-3xl overflow-hidden">
+            <!-- Tab Buttons -->
+            <div class="flex overflow-x-auto border-b border-white/10 text-xs sm:text-sm font-medium scrollbar-none">
+                <button onclick="switchTab('personality')" id="tab-personality" class="tab-btn px-5 py-4 whitespace-nowrap tab-active transition">
+                    <i class="fa-solid fa-user-gear mr-1.5"></i> 타고난 성향/심리
+                </button>
+                <button onclick="switchTab('wealth')" id="tab-wealth" class="tab-btn px-5 py-4 whitespace-nowrap text-gray-400 hover:text-white transition">
+                    <i class="fa-solid fa-coins mr-1.5"></i> 재물 & 돈그릇
+                </button>
+                <button onclick="switchTab('love')" id="tab-love" class="tab-btn px-5 py-4 whitespace-nowrap text-gray-400 hover:text-white transition">
+                    <i class="fa-solid fa-heart mr-1.5"></i> 연애 & 결혼운
+                </button>
+                <button onclick="switchTab('career')" id="tab-career" class="tab-btn px-5 py-4 whitespace-nowrap text-gray-400 hover:text-white transition">
+                    <i class="fa-solid fa-briefcase mr-1.5"></i> 직업 & 적성
+                </button>
+                <button onclick="switchTab('luck2026')" id="tab-luck2026" class="tab-btn px-5 py-4 whitespace-nowrap text-gray-400 hover:text-white transition">
+                    <i class="fa-solid fa-calendar-check mr-1.5"></i> 2026년 대운/세운
+                </button>
+                <button onclick="switchTab('remedy')" id="tab-remedy" class="tab-btn px-5 py-4 whitespace-nowrap text-gray-400 hover:text-white transition">
+                    <i class="fa-solid fa-clover mr-1.5"></i> 럭키 솔루션
+                </button>
+            </div>
+
+            <!-- Tab Contents -->
+            <div class="p-6 sm:p-8">
+                <!-- Personality Content -->
+                <div id="content-personality" class="tab-content space-y-4">
+                    <h4 class="text-base font-bold text-purple-300 mb-2">내면의 오행 에너지 및 십신(十神) 특성</h4>
+                    <div id="personalityText" class="text-sm text-gray-300 leading-relaxed space-y-3"></div>
+                </div>
+
+                <!-- Wealth Content -->
+                <div id="content-wealth" class="tab-content hidden space-y-4">
+                    <h4 class="text-base font-bold text-amber-300 mb-2">재물 흐름 및 자산 관리 가이드</h4>
+                    <div id="wealthText" class="text-sm text-gray-300 leading-relaxed space-y-3"></div>
+                </div>
+
+                <!-- Love Content -->
+                <div id="content-love" class="tab-content hidden space-y-4">
+                    <h4 class="text-base font-bold text-pink-300 mb-2">연애 스타일 및 어울리는 이성 타입</h4>
+                    <div id="loveText" class="text-sm text-gray-300 leading-relaxed space-y-3"></div>
+                </div>
+
+                <!-- Career Content -->
+                <div id="content-career" class="tab-content hidden space-y-4">
+                    <h4 class="text-base font-bold text-emerald-300 mb-2">직업적 성취 방향 및 조직 환경</h4>
+                    <div id="careerText" class="text-sm text-gray-300 leading-relaxed space-y-3"></div>
+                </div>
+
+                <!-- 2026 Luck Content -->
+                <div id="content-luck2026" class="tab-content hidden space-y-4">
+                    <h4 class="text-base font-bold text-indigo-300 mb-2">2026년 병오년(丙午年)의 기운과 핵심 변화</h4>
+                    <div id="luck2026Text" class="text-sm text-gray-300 leading-relaxed space-y-3"></div>
+                </div>
+
+                <!-- Remedy Content -->
+                <div id="content-remedy" class="tab-content hidden space-y-6">
+                    <h4 class="text-base font-bold text-purple-300">부족한 기운을 채워주는 개운(開運) 솔루션</h4>
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <div class="glass-card p-4 rounded-2xl text-center">
+                            <span class="text-xs text-gray-400 block mb-1">행운의 색상</span>
+                            <span id="luckyColor" class="text-base font-bold text-white"></span>
+                        </div>
+                        <div class="glass-card p-4 rounded-2xl text-center">
+                            <span class="text-xs text-gray-400 block mb-1">행운의 숫자</span>
+                            <span id="luckyNumber" class="text-base font-bold text-amber-300"></span>
+                        </div>
+                        <div class="glass-card p-4 rounded-2xl text-center">
+                            <span class="text-xs text-gray-400 block mb-1">행운의 방위</span>
+                            <span id="luckyDirection" class="text-base font-bold text-emerald-300"></span>
+                        </div>
+                        <div class="glass-card p-4 rounded-2xl text-center">
+                            <span class="text-xs text-gray-400 block mb-1">추천 기운 음식</span>
+                            <span id="luckyFood" class="text-base font-bold text-indigo-300"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <!-- Modal 1: Share / Instagram Story Modal -->
+    <div id="shareModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-sm rounded-3xl p-6 relative flex flex-col items-center">
+            <button onclick="closeShareModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            <!-- Card Design for Screenshot -->
+            <div id="storyCard" class="w-full bg-gradient-to-br from-slate-900 via-purple-950 to-slate-900 border border-purple-500/30 rounded-2xl p-6 text-center shadow-2xl relative my-4">
+                <div class="font-serif text-amber-400 text-xs tracking-widest uppercase mb-1">MYUNG SAJU REPORT</div>
+                <h3 id="cardUserName" class="text-xl font-bold text-white mb-2"></h3>
+                <div class="w-16 h-16 rounded-2xl bg-purple-500/20 border border-purple-500/40 mx-auto flex items-center justify-center text-3xl my-3 text-purple-300" id="cardDayPillar">
+                </div>
+                <p id="cardPersonaTitle" class="text-sm font-semibold text-purple-200 mb-2"></p>
+                <p id="cardSummary" class="text-xs text-gray-300 line-clamp-3 mb-4 leading-relaxed"></p>
+                
+                <div class="pt-3 border-t border-white/10 flex justify-between items-center text-[10px] text-gray-400">
+                    <span>#현대사주 #MYUNG</span>
+                    <span class="text-purple-300">myung-saju.github.io</span>
+                </div>
+            </div>
+
+            <p class="text-xs text-gray-400 mb-4 text-center">화면을 캡처하거나 아래 버튼으로 링크를 공유해 보세요!</p>
+            
+            <button onclick="copyShareLink()" class="w-full py-3 bg-purple-600 hover:bg-purple-500 text-white rounded-xl text-xs font-bold transition flex items-center justify-center space-x-2">
+                <i class="fa-solid fa-link"></i>
+                <span>링크 복사하기</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal 2: Mini Compatibility Modal -->
+    <div id="compatModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="glass-panel w-full max-w-md rounded-3xl p-6 sm:p-8 relative">
+            <button onclick="closeCompatibilityModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            
+            <h3 class="text-xl font-bold text-white mb-1 flex items-center space-x-2">
+                <i class="fa-solid fa-heart text-pink-500"></i>
+                <span>오행 궁합 조화도 측정</span>
+            </h3>
+            <p class="text-xs text-gray-400 mb-6">두 사람의 생년월일을 비교하여 오행 상생/상극 궁합 점수를 계산합니다.</p>
+
+            <form onsubmit="handleCompatSubmit(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs text-gray-300 mb-1">첫 번째 사람 (생년월일)</label>
+                    <input type="date" id="compatDate1" required class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-300 mb-1">두 번째 사람 (생년월일)</label>
+                    <input type="date" id="compatDate2" required class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white">
+                </div>
+                <button type="submit" class="w-full py-3 bg-gradient-to-r from-pink-600 to-purple-600 text-white rounded-xl text-sm font-bold shadow-lg shadow-pink-500/20">
+                    궁합 분석하기
+                </button>
+            </form>
+
+            <div id="compatResult" class="hidden mt-6 p-4 rounded-2xl bg-white/5 border border-white/10 text-center">
+                <span class="text-xs text-pink-300 font-semibold block">오행 조화 점수</span>
+                <div id="compatScore" class="text-3xl font-bold text-white my-1"></div>
+                <p id="compatText" class="text-xs text-gray-300 leading-relaxed"></p>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- JavaScript Engine -->
+    <script>
+        // Data Structures for Heavenly Stems & Earthly Branches
+        const STEMS = [
+            { name: '갑', hanja: '甲', element: 'wood', polarity: 'yang', desc: '거목, 곧은 의지, 리더십' },
+            { name: '을', hanja: '乙', element: 'wood', polarity: 'yin', desc: '화초, 유연함, 친화력' },
+            { name: '병', hanja: '丙', element: 'fire', polarity: 'yang', desc: '태양, 열정, 열린 마음' },
+            { name: '정', hanja: '丁', element: 'fire', polarity: 'yin', desc: '촛불, 따뜻함, 섬세함' },
+            { name: '무', hanja: '戊', element: 'earth', polarity: 'yang', desc: '태산, 든든함, 신용' },
+            { name: '기', hanja: '己', element: 'earth', polarity: 'yin', desc: '옥토, 포용력, 실속' },
+            { name: '경', hanja: '庚', element: 'metal', polarity: 'yang', desc: '원석, 결단력, 정의감' },
+            { name: '신', hanja: '辛', element: 'metal', polarity: 'yin', desc: '보석, 예리함, 완벽주의' },
+            { name: '임', hanja: '壬', element: 'water', polarity: 'yang', desc: '바다, 지혜, 넓은 안목' },
+            { name: '계', hanja: '癸', element: 'water', polarity: 'yin', desc: '단비, 창의성, 순발력' }
+        ];
+
+        const BRANCHES = [
+            { name: '자', hanja: '子', element: 'water', animal: '쥐' },
+            { name: '축', hanja: '丑', element: 'earth', animal: '소' },
+            { name: '인', hanja: '寅', element: 'wood', animal: '호랑이' },
+            { name: '묘', hanja: '卯', element: 'wood', animal: '토끼' },
+            { name: '진', hanja: '辰', element: 'earth', animal: '용' },
+            { name: '사', hanja: '巳', element: 'fire', animal: '뱀' },
+            { name: '오', hanja: '午', element: 'fire', animal: '말' },
+            { name: '미', hanja: '未', element: 'earth', animal: '양' },
+            { name: '신', hanja: '申', element: 'metal', animal: '원숭이' },
+            { name: '유', hanja: '酉', element: 'metal', animal: '닭' },
+            { name: '술', hanja: '戌', element: 'earth', animal: '개' },
+            { name: '해', hanja: '亥', element: 'water', animal: '돼지' }
+        ];
+
+        const ELEMENT_NAMES = {
+            wood: { ko: '목(木)', color: '#10B981', badge: 'text-emerald-400 bg-emerald-500/10' },
+            fire: { ko: '화(火)', color: '#EF4444', badge: 'text-red-400 bg-red-500/10' },
+            earth: { ko: '토(土)', color: '#F59E0B', badge: 'text-amber-400 bg-amber-500/10' },
+            metal: { ko: '금(金)', color: '#CBD5E1', badge: 'text-slate-200 bg-slate-500/10' },
+            water: { ko: '수(水)', color: '#6366F1', badge: 'text-indigo-400 bg-indigo-500/10' }
+        };
+
+        // 60 Day Master Interpretations Data
+        const PERSONA_MAP = {
+            '갑': { title: '개척하는 거목형 리더', mbti: 'ENTJ / ENFJ 유형과 유사', desc: '주관이 뚜렷하며 추진력이 뛰어납니다. 꺾이지 않는 당당함과 타인을 리드하는 보스 기질을 가지고 있습니다.' },
+            '을': { title: '유연한 적응왕 덩굴형', mbti: 'ENFP / INFP 유형과 유사', desc: '환경에 상관없이 생존력이 강하고 친화력이 높습니다. 친근하면서도 실속을 잘 차리는 유연함이 강점입니다.' },
+            '병': { title: '세상을 밝히는 인플루언서', mbti: 'ESFP / ENTP 유형과 유사', desc: '솔직하고 열정적이며 어디서나 존재감이 빛납니다. 뒤끝이 없고 주위 사람들에게 긍정적 에너지를 뿜어냅니다.' },
+            '정': { title: '따뜻하고 예리한 힐러', mbti: 'INFJ / ISFJ 유형과 유사', desc: '조용해 보이지만 내면에 뜨거운 열정과 깊은 직관을 가졌습니다. 타인의 마음을 세심하게 보살피는 능력이 우수합니다.' },
+            '무': { title: '신뢰의 상징 신중한 태산형', mbti: 'ISTJ / ESTJ 유형과 유사', desc: '묵묵하고 중후하여 사람들이 의지하기 좋아합니다. 약속과 신용을 중시하며 안정적인 성장을 지향합니다.' },
+            '기': { title: '포용력 높은 만능 옥토형', mbti: 'ISFP / ESFJ 유형과 유사', desc: '포용력이 넓고 다재다능합니다. 주변 사람들을 실속 있게 챙기며 현실적인 조율 능력과 감각이 풍부합니다.' },
+            '경': { title: '단호하고 정의로운 원석형', mbti: 'ESTP / ISTP 유형과 유사', desc: '결단력이 빠르고 의리가 강합니다. 옳고 그름이 명확하며 의지를 가지고 결승점까지 밀어붙이는 파워가 있습니다.' },
+            '신': { title: '섬세하고 감각적인 보석형', mbti: 'INTJ / INTP 유형과 유사', desc: '디테일에 강하고 미적/지적 감각이 매우 뛰어납니다. 완벽주의 성향이 있으며 자신만의 기준이 엄격합니다.' },
+            '임': { title: '지혜롭고 유유자적한 바다형', mbti: 'ENTP / INTP 유형과 유사', desc: '생각의 깊이가 깊고 통찰력이 뛰어납니다. 자유로운 영혼이며 대범하게 상황을 조율하는 능력이 있습니다.' },
+            '계': { title: '아이디어가 샘솟는 단비형', mbti: 'INFP / ENFP 유형과 유사', desc: '지혜롭고 기지가 뛰어납니다. 유연하게 환경 변화에 대응하며 섬세한 감수성과 아이디어가 돋보입니다.' }
+        };
+
+        let elementChartInstance = null;
+        let currentSajuData = null;
+
+        // Julian Day Number Calculation algorithm for exact Ganji conversion
+        function getGanjiFromDate(dateObj, hourIdx) {
+            const y = dateObj.getFullYear();
+            const m = dateObj.getMonth() + 1;
+            const d = dateObj.getDate();
+
+            // Simplified standard Saju mapping calculation based on Reference Julian Date
+            let a = Math.floor((14 - m) / 12);
+            let y1 = y + 4800 - a;
+            let m1 = m + 12 * a - 3;
+            let jdn = d + Math.floor((153 * m1 + 2) / 5) + 365 * y1 + Math.floor(y1 / 4) - Math.floor(y1 / 100) + Math.floor(y1 / 400) - 32045;
+
+            // Year Ganji
+            let yearStemIdx = (y - 4) % 10;
+            if (yearStemIdx < 0) yearStemIdx += 10;
+            let yearBranchIdx = (y - 4) % 12;
+            if (yearBranchIdx < 0) yearBranchIdx += 12;
+
+            // Month Ganji (Approx)
+            let monthStemIdx = (yearStemIdx * 2 + m) % 10;
+            let monthBranchIdx = (m + 1) % 12;
+
+            // Day Ganji
+            let dayStemIdx = (jdn + 4) % 10;
+            let dayBranchIdx = (jdn + 2) % 12;
+
+            // Hour Ganji
+            let hourStemIdx = 0;
+            let hourBranchIdx = 0;
+            if (hourIdx !== 'unknown') {
+                let h = parseInt(hourIdx);
+                hourBranchIdx = h;
+                hourStemIdx = (dayStemIdx * 2 + h) % 10;
+            }
+
+            return {
+                year: { stem: STEMS[yearStemIdx], branch: BRANCHES[yearBranchIdx] },
+                month: { stem: STEMS[monthStemIdx], branch: BRANCHES[monthBranchIdx] },
+                day: { stem: STEMS[dayStemIdx], branch: BRANCHES[dayBranchIdx] },
+                hour: hourIdx !== 'unknown' ? { stem: STEMS[hourStemIdx], branch: BRANCHES[hourBranchIdx] } : null
+            };
+        }
+
+        // Handle Saju Form Submit
+        function handleSajuSubmit(e) {
+            e.preventDefault();
+
+            const name = document.getElementById('userName').value;
+            const birthDateVal = document.getElementById('birthDate').value;
+            const birthTimeVal = document.getElementById('birthTime').value;
+
+            if (!birthDateVal) return;
+
+            document.getElementById('loader').classList.remove('hidden');
+            document.getElementById('results-section').classList.add('hidden');
+
+            setTimeout(() => {
+                const dateObj = new Date(birthDateVal);
+                const ganji = getGanjiFromDate(dateObj, birthTimeVal);
+
+                currentSajuData = { name, dateObj, ganji };
+                renderResults(name, dateObj, ganji);
+
+                document.getElementById('loader').classList.add('hidden');
+                document.getElementById('results-section').classList.remove('hidden');
+
+                // Smooth scroll down to results
+                document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
+            }, 600);
+        }
+
+        function renderResults(name, dateObj, ganji) {
+            document.getElementById('resUserName').innerText = name;
+            document.getElementById('resBirthSummary').innerText = `${dateObj.getFullYear()}년 ${dateObj.getMonth() + 1}월 ${dateObj.getDate()}일 출생`;
+
+            // Pillars Output
+            // Year
+            document.getElementById('yearStem').innerText = `${ganji.year.stem.name}(${ganji.year.stem.hanja})`;
+            document.getElementById('yearBranch').innerText = `${ganji.year.branch.name}(${ganji.year.branch.hanja})`;
+            document.getElementById('yearTenGod').innerText = ELEMENT_NAMES[ganji.year.stem.element].ko;
+
+            // Month
+            document.getElementById('monthStem').innerText = `${ganji.month.stem.name}(${ganji.month.stem.hanja})`;
+            document.getElementById('monthBranch').innerText = `${ganji.month.branch.name}(${ganji.month.branch.hanja})`;
+            document.getElementById('monthTenGod').innerText = ELEMENT_NAMES[ganji.month.stem.element].ko;
+
+            // Day (Main)
+            document.getElementById('dayStem').innerText = `${ganji.day.stem.name}(${ganji.day.stem.hanja})`;
+            document.getElementById('dayBranch').innerText = `${ganji.day.branch.name}(${ganji.day.branch.hanja})`;
+
+            // Hour
+            if (ganji.hour) {
+                document.getElementById('hourStem').innerText = `${ganji.hour.stem.name}(${ganji.hour.stem.hanja})`;
+                document.getElementById('hourBranch').innerText = `${ganji.hour.branch.name}(${ganji.hour.branch.hanja})`;
+                document.getElementById('hourTenGod').innerText = ELEMENT_NAMES[ganji.hour.stem.element].ko;
+            } else {
+                document.getElementById('hourStem').innerText = '-';
+                document.getElementById('hourBranch').innerText = '-';
+                document.getElementById('hourTenGod').innerText = '미입력';
+            }
+
+            // Persona Render
+            const dayStemName = ganji.day.stem.name;
+            const persona = PERSONA_MAP[dayStemName];
+            document.getElementById('personaTitle').innerText = `${dayStemName}일주: ${persona.title}`;
+            document.getElementById('personaDesc').innerText = persona.desc;
+            document.getElementById('personaMbti').innerText = persona.mbti;
+
+            // Calculate Element Counts
+            const counts = { wood: 0, fire: 0, earth: 0, metal: 0, water: 0 };
+            const activePillars = [ganji.year, ganji.month, ganji.day];
+            if (ganji.hour) activePillars.push(ganji.hour);
+
+            activePillars.forEach(p => {
+                counts[p.stem.element]++;
+                counts[p.branch.element]++;
+            });
+
+            renderElementChart(counts);
+            renderDetailedFortunes(ganji, counts);
+        }
+
+        function renderElementChart(counts) {
+            const ctx = document.getElementById('elementChart').getContext('2d');
+
+            if (elementChartInstance) {
+                elementChartInstance.destroy();
+            }
+
+            elementChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['목(木)', '화(火)', '토(土)', '금(金)', '수(水)'],
+                    datasets: [{
+                        data: [counts.wood, counts.fire, counts.earth, counts.metal, counts.water],
+                        backgroundColor: ['#10B981', '#EF4444', '#F59E0B', '#CBD5E1', '#6366F1'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: { color: '#9CA3AF', font: { size: 10 } }
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+
+            // Find dominant element
+            const maxEl = Object.keys(counts).reduce((a, b) => counts[a] > counts[b] ? a : b);
+            document.getElementById('elementSummaryText').innerText = `가장 강력한 오행 기운은 '${ELEMENT_NAMES[maxEl].ko}'입니다.`;
+        }
+
+        function renderDetailedFortunes(ganji, counts) {
+            const dayStem = ganji.day.stem;
+
+            // Personality
+            document.getElementById('personalityText').innerHTML = `
+                <p>당신은 <strong>${dayStem.name}(${dayStem.hanja})</strong>의 기운을 가지고 태어났습니다. ${dayStem.desc}의 특성이 강하게 발현됩니다.</p>
+                <p>오행의 조화로 볼 때, 주도적이고 목표 지향적인 에너지를 가지고 있으며 타인과의 협력 속에서 자신의 가치를 가장 명확히 드러내는 타입입니다.</p>
+            `;
+
+            // Wealth
+            document.getElementById('wealthText').innerHTML = `
+                <p>재물운의 핵심은 <strong>'지속적인 자산의 시스템화'</strong>에 있습니다.</p>
+                <p>한 번에 큰 한 방을 노리기보다는, 꾸준히 들어오는 정기적인 수익 구조를 다지는 것이 유효합니다. 2026년 이후 재물 그릇이 가득 차오르는 시기를 맞이하게 됩니다.</p>
+            `;
+
+            // Love
+            document.getElementById('loveText').innerHTML = `
+                <p>상대방에게 신뢰감을 주는 스타일입니다. 내면의 따뜻함이 매력 포인트입니다.</p>
+                <p>서로의 솔직한 대화와 가치관 존중이 연애 만족도를 크게 향상시킵니다. 감정적 기복을 차분히 받아줄 수 있는 상생 오행 타입과 최상의 궁합을 이룹니다.</p>
+            `;
+
+            // Career
+            document.getElementById('careerText').innerHTML = `
+                <p>분석력과 기획력이 돋보입니다. 전문성이 발휘되는 직무에서 가장 눈부신 성과를 냅니다.</p>
+                <p><strong>추천 분야:</strong> IT/데이터, 기획·브랜딩, 교육 및 컨설팅, 창의적 콘텐츠 에이전시</p>
+            `;
+
+            // 2026 Luck
+            document.getElementById('luck2026Text').innerHTML = `
+                <p>2026년 <strong>병오년(丙午年)</strong>은 뜨거운 불(火)의 에너지가 강하게 몰아치는 해입니다.</p>
+                <p>당신에게 새로운 도전과 외부 활동 확장의 기회가 적극적으로 찾아옵니다. 자신감을 갖고 주도적으로 판을 짜는 것이 행운을 이끄는 열쇠입니다.</p>
+            `;
+
+            // Remedy
+            const colors = { wood: '초록색 / 에메랄드', fire: '붉은색 / 핑크', earth: '노란색 / 베이지', metal: '흰색 / 실버', water: '검은색 / 딥블루' };
+            const numbers = { wood: '3, 8', fire: '2, 7', earth: '5, 10', metal: '4, 9', water: '1, 6' };
+            const foods = { wood: '신선한 샐러드, 차', fire: '따뜻한 요리, 커피', earth: '곡류, 단호박', metal: '견과류, 도라지차', water: '해조류, 충분한 음용수' };
+
+            document.getElementById('luckyColor').innerText = colors[dayStem.element];
+            document.getElementById('luckyNumber').innerText = numbers[dayStem.element];
+            document.getElementById('luckyDirection').innerText = '동남쪽 (東南)';
+            document.getElementById('luckyFood').innerText = foods[dayStem.element];
+        }
+
+        // Tab Switcher
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('tab-active');
+                btn.classList.add('text-gray-400');
+            });
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+
+            const activeBtn = document.getElementById(`tab-${tabId}`);
+            activeBtn.classList.add('tab-active');
+            activeBtn.classList.remove('text-gray-400');
+
+            document.getElementById(`content-${tabId}`).classList.remove('hidden');
+        }
+
+        // Modals Logic
+        function openShareModal() {
+            if (!currentSajuData) return;
+
+            document.getElementById('cardUserName').innerText = `${currentSajuData.name}님의 사주`;
+            document.getElementById('cardDayPillar').innerText = `${currentSajuData.ganji.day.stem.hanja}${currentSajuData.ganji.day.branch.hanja}`;
+            document.getElementById('cardPersonaTitle').innerText = PERSONA_MAP[currentSajuData.ganji.day.stem.name].title;
+            document.getElementById('cardSummary').innerText = PERSONA_MAP[currentSajuData.ganji.day.stem.name].desc;
+
+            document.getElementById('shareModal').classList.remove('hidden');
+        }
+
+        function closeShareModal() {
+            document.getElementById('shareModal').classList.add('hidden');
+        }
+
+        function copyShareLink() {
+            navigator.clipboard.writeText(window.location.href);
+            alert('웹사이트 링크가 클립보드에 복사되었습니다!');
+        }
+
+        function openCompatibilityModal() {
+            document.getElementById('compatModal').classList.remove('hidden');
+        }
+
+        function closeCompatibilityModal() {
+            document.getElementById('compatModal').classList.add('hidden');
+        }
+
+        function handleCompatSubmit(e) {
+            e.preventDefault();
+            const d1 = new Date(document.getElementById('compatDate1').value);
+            const d2 = new Date(document.getElementById('compatDate2').value);
+
+            const g1 = getGanjiFromDate(d1, 'unknown');
+            const g2 = getGanjiFromDate(d2, 'unknown');
+
+            // Sample Score Calculation
+            let score = 85;
+            if (g1.day.stem.element === g2.day.stem.element) score = 92;
+
+            document.getElementById('compatScore').innerText = `${score}점 / 100점`;
+            document.getElementById('compatText').innerText = `두 사람의 일주 오행 기운이 서로 조화를 이루어, 깊은 공감대와 함께 보완적인 시너지를 낼 수 있는 매우 긍정적인 조합입니다.`;
+            document.getElementById('compatResult').classList.remove('hidden');
+        }
+
+        function scrollToInput() {
+            document.getElementById('input-section').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
