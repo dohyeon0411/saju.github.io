@@ -568,37 +568,57 @@
     </div>
 
     <!-- Modal 2: Mini Compatibility Modal -->
-    <div id="compatModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel w-full max-w-md rounded-3xl p-6 sm:p-8 relative">
+    <div id="compatModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="glass-panel w-full max-w-lg rounded-3xl p-6 sm:p-8 relative my-8">
             <button onclick="closeCompatibilityModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white">
                 <i class="fa-solid fa-xmark text-xl"></i>
             </button>
             
             <h3 class="text-xl font-bold text-white mb-1 flex items-center space-x-2">
                 <i class="fa-solid fa-heart text-rose-500"></i>
-                <span>오행 궁합 조화도 측정</span>
+                <span>사주 궁합 심층 분석</span>
             </h3>
-            <p class="text-xs text-gray-400 mb-6">두 사람의 생년월일을 비교하여 오행 상생/상극 궁합 점수를 계산합니다.</p>
+            <p class="text-xs text-gray-400 mb-6">두 사람의 생년월일(과 시간)을 입력하면 일간 오행의 상생·상극 관계를 사주 원국과 함께 분석합니다.</p>
 
-            <form onsubmit="handleCompatSubmit(event)" class="space-y-4">
-                <div>
-                    <label class="block text-xs text-gray-300 mb-1">첫 번째 사람 (생년월일)</label>
-                    <input type="date" id="compatDate1" required class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white">
+            <form onsubmit="handleCompatSubmit(event)" class="space-y-5">
+                <div class="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-3">
+                    <span class="text-xs font-bold text-sky-300">첫 번째 사람</span>
+                    <div class="grid grid-cols-2 gap-3">
+                        <input type="text" id="compatName1" maxlength="10" placeholder="이름(선택)" class="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500">
+                        <input type="date" id="compatDate1" required class="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500">
+                    </div>
+                    <select id="compatTime1" class="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-sky-500">
+                        <option value="unknown">태어난 시간 모름</option>
+                        <option value="0">자시 (23:30~01:29)</option><option value="1">축시 (01:30~03:29)</option>
+                        <option value="2">인시 (03:30~05:29)</option><option value="3">묘시 (05:30~07:29)</option>
+                        <option value="4">진시 (07:30~09:29)</option><option value="5">사시 (09:30~11:29)</option>
+                        <option value="6">오시 (11:30~13:29)</option><option value="7">미시 (13:30~15:29)</option>
+                        <option value="8">신시 (15:30~17:29)</option><option value="9">유시 (17:30~19:29)</option>
+                        <option value="10">술시 (19:30~21:29)</option><option value="11">해시 (21:30~23:29)</option>
+                    </select>
                 </div>
-                <div>
-                    <label class="block text-xs text-gray-300 mb-1">두 번째 사람 (생년월일)</label>
-                    <input type="date" id="compatDate2" required class="w-full bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white">
+                <div class="p-4 rounded-2xl bg-white/5 border border-white/10 space-y-3">
+                    <span class="text-xs font-bold text-rose-300">두 번째 사람</span>
+                    <div class="grid grid-cols-2 gap-3">
+                        <input type="text" id="compatName2" maxlength="10" placeholder="이름(선택)" class="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-rose-500">
+                        <input type="date" id="compatDate2" required class="bg-white/5 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-rose-500">
+                    </div>
+                    <select id="compatTime2" class="w-full bg-slate-900 border border-white/10 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-rose-500">
+                        <option value="unknown">태어난 시간 모름</option>
+                        <option value="0">자시 (23:30~01:29)</option><option value="1">축시 (01:30~03:29)</option>
+                        <option value="2">인시 (03:30~05:29)</option><option value="3">묘시 (05:30~07:29)</option>
+                        <option value="4">진시 (07:30~09:29)</option><option value="5">사시 (09:30~11:29)</option>
+                        <option value="6">오시 (11:30~13:29)</option><option value="7">미시 (13:30~15:29)</option>
+                        <option value="8">신시 (15:30~17:29)</option><option value="9">유시 (17:30~19:29)</option>
+                        <option value="10">술시 (19:30~21:29)</option><option value="11">해시 (21:30~23:29)</option>
+                    </select>
                 </div>
                 <button type="submit" class="w-full py-3 bg-gradient-to-r from-rose-600 to-sky-600 text-white rounded-xl text-sm font-bold shadow-lg shadow-rose-500/20">
-                    궁합 분석하기
+                    사주 궁합 분석하기
                 </button>
             </form>
 
-            <div id="compatResult" class="hidden mt-6 p-4 rounded-2xl bg-white/5 border border-white/10 text-center">
-                <span class="text-xs text-rose-300 font-semibold block">오행 조화 점수</span>
-                <div id="compatScore" class="text-3xl font-bold text-white my-1"></div>
-                <p id="compatText" class="text-xs text-gray-300 leading-relaxed"></p>
-            </div>
+            <div id="compatResult" class="hidden mt-6"></div>
         </div>
     </div>
 
@@ -870,22 +890,42 @@
             metal: { wood: 62, fire: 52, earth: 91, metal: 70, water: 87 },
             water: { wood: 93, fire: 60, earth: 50, metal: 87, water: 73 }
         };
-        const COMPAT_DESC = {
-            high: [
-                '두 사람의 오행이 서로를 성장시키는 상생(相生) 관계입니다. 자연스럽게 서로의 부족한 면을 채워주며 함께 있을 때 에너지가 샘솟습니다. 장기적인 관계에서 더욱 깊어지는 최상의 궁합입니다.',
-                '서로의 기운이 조화를 이루어 안정감과 성장이 동시에 이루어집니다. 의사소통이 자연스럽고 갈등보다 협력이 많으며, 함께 목표를 향해 나아갈 때 강력한 시너지가 발생합니다.',
-                '오행의 흐름이 서로를 보완하는 이상적인 관계입니다. 두 사람이 함께 있을 때 개인으로 있을 때보다 더 큰 에너지가 발산되며, 서로의 단점을 감싸줄 수 있는 포용력 있는 조합입니다.'
-            ],
-            mid: [
-                '두 사람의 오행이 같거나 중립적인 관계입니다. 서로 이해하는 부분이 많아 편안하지만, 때로는 비슷한 약점이 겹쳐 함께 어려움을 겪을 수 있습니다. 의식적인 노력이 관계를 풍요롭게 합니다.',
-                '비슷한 기운을 가진 두 사람입니다. 공감대가 넓고 의기투합이 잘 되지만, 경쟁심이 발동하거나 같은 실수를 반복하는 패턴을 주의해야 합니다. 서로 다른 강점을 개발하면 더 좋은 관계가 됩니다.',
-                '안정적이지만 자극이 적은 관계입니다. 편안한 일상은 공유할 수 있지만 성장을 위한 도전이나 변화를 함께 만들어가는 의지가 필요합니다.'
-            ],
-            low: [
-                '두 사람의 오행이 상극(相剋) 관계에 있습니다. 초반에는 서로에게 강하게 끌릴 수 있지만 마찰이 잦을 수 있습니다. 상대의 다름을 이해하고 존중하는 노력이 이 관계의 핵심입니다. 극복하면 강한 성장의 관계가 됩니다.',
-                '서로 다른 방향을 향하는 기운의 조합입니다. 의견 충돌이 생기기 쉽고 소통 방식의 차이로 오해가 쌓일 수 있습니다. 그러나 이 긴장감이 서로를 자극하고 성장시키는 원동력이 되기도 합니다.',
-                '에너지 방향이 상충되는 관계입니다. 함께하면 서로에게 과도한 에너지 소모가 생길 수 있습니다. 각자의 공간을 충분히 확보하고 차이를 인정하는 성숙한 접근이 필요한 관계입니다.'
-            ]
+        // 두 오행의 관계 유형 판정 (A 기준으로 B가 어떤 관계인가)
+        // 상생 생성: A가 B를 생함 / 상생 수혜: B가 A를 생함 / 상극 제어: A가 B를 극함 / 상극 피극: B가 A를 극함 / 비화: 같은 오행
+        const SHENG = { wood: 'fire', fire: 'earth', earth: 'metal', metal: 'water', water: 'wood' }; // A생B
+        const KE = { wood: 'earth', fire: 'metal', earth: 'water', metal: 'wood', water: 'fire' };     // A극B
+
+        function elementRelation(a, b) {
+            if (a === b) return 'same';
+            if (SHENG[a] === b) return 'a_sheng_b';   // A가 B를 낳아줌
+            if (SHENG[b] === a) return 'b_sheng_a';   // B가 A를 낳아줌
+            if (KE[a] === b) return 'a_ke_b';         // A가 B를 극함
+            if (KE[b] === a) return 'b_ke_a';         // B가 A를 극함
+            return 'same';
+        }
+
+        // 관계 유형별 상세 사주 해설 (상생/상극 원리 근거 포함)
+        const RELATION_DESC = {
+            a_sheng_b: {
+                title: '상생(相生) — 베풀고 이끄는 관계',
+                body: '첫 번째 분의 일간 오행이 두 번째 분의 오행을 낳아주는 상생 관계입니다. 명리학에서 생(生)은 어머니가 자식을 키우듯 한쪽이 다른 쪽에게 에너지를 공급하는 구조를 뜻합니다. 첫 번째 분이 두 번째 분을 보살피고 이끌어주는 역할을 자연스럽게 맡게 되며, 두 번째 분은 그 안에서 안정감을 얻고 성장합니다. 베푸는 쪽이 지치지 않도록 두 번째 분의 감사 표현과 보답이 관계의 균형을 지키는 열쇠입니다. 장기적으로 서로를 끌어올리는 건강한 관계로 발전할 가능성이 높습니다.'
+            },
+            b_sheng_a: {
+                title: '상생(相生) — 지지받고 채워지는 관계',
+                body: '두 번째 분의 오행이 첫 번째 분의 일간을 낳아주는 상생 관계입니다. 생(生)의 흐름에서 두 번째 분이 첫 번째 분에게 힘과 자원을 공급하는 든든한 조력자가 됩니다. 첫 번째 분은 두 번째 분 곁에서 심리적 안정과 실질적 도움을 얻어 자신의 역량을 더 크게 펼칠 수 있습니다. 다만 받기만 하는 데 익숙해지면 관계가 한쪽으로 기울 수 있으니, 첫 번째 분이 두 번째 분을 존중하고 보살피려는 의식적 노력이 필요합니다. 서로의 역할이 분명해 오래 지속되기 좋은 조합입니다.'
+            },
+            a_ke_b: {
+                title: '상극(相剋) — 통제와 자극의 관계',
+                body: '첫 번째 분의 오행이 두 번째 분의 오행을 극(剋)하는 상극 관계입니다. 극(剋)은 금(金)이 나무를 다듬고 물이 불을 다스리듯 한쪽이 다른 쪽을 제어하는 긴장 구조입니다. 첫 번째 분이 주도권을 쥐기 쉬우며 두 번째 분에게 자극과 변화를 불러옵니다. 적절하면 두 번째 분을 성장시키는 자극제가 되지만, 과하면 두 번째 분이 억눌림을 느껴 갈등으로 번질 수 있습니다. 첫 번째 분의 배려와 완급 조절, 두 번째 분의 자기 주장 균형이 관계의 성패를 가릅니다.'
+            },
+            b_ke_a: {
+                title: '상극(相剋) — 긴장 속 끌림의 관계',
+                body: '두 번째 분의 오행이 첫 번째 분의 일간을 극(剋)하는 상극 관계입니다. 두 번째 분이 첫 번째 분에게 자극과 압력을 주는 구조로, 초반에는 강한 끌림과 긴장감이 공존합니다. 첫 번째 분은 두 번째 분을 통해 자신의 한계를 넘어서는 계기를 얻지만, 스트레스가 쌓이면 방어적으로 변할 수 있습니다. 두 번째 분이 통제보다 존중의 태도를 취하고, 첫 번째 분이 차이를 성장의 기회로 받아들이면 어떤 관계보다 깊고 단단해질 수 있는 조합입니다.'
+            },
+            same: {
+                title: '비화(比和) — 닮은꼴 동반자 관계',
+                body: '두 분의 일간 오행이 같은 비화(比和) 관계입니다. 비슷한 기질과 가치관을 공유해 처음부터 말이 잘 통하고 편안함을 느낍니다. 서로를 깊이 이해하는 것이 가장 큰 강점이지만, 같은 약점과 고집도 공유하기 때문에 한번 부딪치면 양보 없이 평행선을 달리기 쉽습니다. 경쟁 구도로 흐르지 않도록 서로의 영역을 존중하고, 부족한 오행을 함께 보완해 나가면 둘도 없는 동반자가 됩니다.'
+            }
         };
 
         function getCompatResult(e1, e2) {
@@ -896,12 +936,19 @@
             else if (score >= 65) { tier = 'mid'; label = '중상 ★★★☆☆'; color = '#60A5FA'; }
             else if (score >= 58) { tier = 'mid'; label = '중 ★★★☆☆'; color = '#34D399'; }
             else { tier = 'low'; label = '도전적 ★★☆☆☆'; color = '#F59E0B'; }
-            const descArr = COMPAT_DESC[tier];
-            const desc = descArr[Math.floor(Math.random() * descArr.length)];
+            const rel = elementRelation(e1, e2);
+            const relInfo = RELATION_DESC[rel];
             const e1Name = ELEMENT_NAMES[e1].ko;
             const e2Name = ELEMENT_NAMES[e2].ko;
-            return { score, tier, label, color, desc, e1Name, e2Name };
+            return { score, tier, label, color, rel, relTitle: relInfo.title, relBody: relInfo.body, e1Name, e2Name };
         }
+
+        // 궁합 조언 (티어별)
+        const COMPAT_ADVICE = {
+            high: '두 분은 오행의 흐름이 서로를 살리는 좋은 조합입니다. 지금의 자연스러운 조화에 안주하지 말고, 함께 새로운 목표를 세우면 관계가 한 단계 더 깊어집니다.',
+            mid: '무난하고 편안한 관계이지만 자칫 밋밋해질 수 있습니다. 서로의 다른 매력을 꾸준히 발견하려는 노력이 관계를 신선하게 유지해 줍니다.',
+            low: '긴장이 있는 조합이지만, 그만큼 서로를 성장시킬 잠재력도 큽니다. 차이를 틀림이 아닌 다름으로 받아들이고 각자의 공간을 존중하면 단단한 관계가 됩니다.'
+        };
 
         let elementChartInstance = null;
         let currentSajuData = null;
@@ -928,9 +975,9 @@
             let monthStemIdx = (yearStemIdx * 2 + m) % 10;
             let monthBranchIdx = (m + 1) % 12;
 
-            // Day Ganji
-            let dayStemIdx = (jdn + 4) % 10;
-            let dayBranchIdx = (jdn + 2) % 12;
+            // Day Ganji — 기준일 2000-01-01 = 戊午(무오)로 보정한 정확한 공식
+            let dayStemIdx = (jdn + 9) % 10;
+            let dayBranchIdx = (jdn + 1) % 12;
 
             // Hour Ganji
             let hourStemIdx = 0;
@@ -1154,39 +1201,138 @@
             document.getElementById('compatModal').classList.add('hidden');
         }
 
+        // 사주 원국 오행 분포 계산 (연·월·일 + 시 있으면 시까지)
+        function countElements(g) {
+            const counts = { wood: 0, fire: 0, earth: 0, metal: 0, water: 0 };
+            const pillars = [g.year, g.month, g.day];
+            if (g.hour) pillars.push(g.hour);
+            pillars.forEach(p => { counts[p.stem.element]++; counts[p.branch.element]++; });
+            return counts;
+        }
+
+        // 한 사람의 오행 분포를 요약 문장으로
+        function elementSummary(counts) {
+            const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+            const top = sorted[0], low = sorted[sorted.length - 1];
+            return { topName: ELEMENT_NAMES[top[0]].ko, topCnt: top[1], lowName: ELEMENT_NAMES[low[0]].ko, lowCnt: low[1] };
+        }
+
+        // 두 사람 오행 상호 보완도: 한쪽에 부족한 오행을 상대가 채워주는지
+        function complementText(c1, c2, name1, name2) {
+            const lack1 = Object.entries(c1).sort((a, b) => a[1] - b[1])[0];
+            const lack2 = Object.entries(c2).sort((a, b) => a[1] - b[1])[0];
+            const give2to1 = c2[lack1[0]] >= 2;
+            const give1to2 = c1[lack2[0]] >= 2;
+            let txt = '';
+            if (give2to1) txt += `${name2}님은 ${name1}님에게 부족한 ${ELEMENT_NAMES[lack1[0]].ko} 기운을 풍부하게 가지고 있어 서로를 채워줍니다. `;
+            if (give1to2) txt += `${name1}님 또한 ${name2}님에게 부족한 ${ELEMENT_NAMES[lack2[0]].ko} 기운을 보완해 줍니다. `;
+            if (!txt) txt = '두 분 모두 비슷한 오행이 부족해, 함께 그 기운을 의식적으로 채워 나가면 관계가 더 단단해집니다. ';
+            return txt;
+        }
+
+        function pillarCell(label, pillar, highlight) {
+            if (!pillar) return `<div class="text-center"><div class="text-[9px] text-gray-500 mb-1">${label}</div><div class="text-sm text-gray-600">-</div></div>`;
+            const cls = highlight ? 'text-cyan-200 font-bold' : 'text-gray-300';
+            return `<div class="text-center">
+                <div class="text-[9px] text-gray-500 mb-1">${label}</div>
+                <div class="text-sm ${cls}">${pillar.stem.hanja}${pillar.branch.hanja}</div>
+            </div>`;
+        }
+
+        function personBlock(name, g, colorClass) {
+            const persona = PERSONA_MAP[g.day.stem.name];
+            return `
+                <div class="flex-1 p-3 rounded-2xl bg-white/5 border border-white/10">
+                    <div class="text-xs font-bold ${colorClass} mb-2">${name}</div>
+                    <div class="grid grid-cols-4 gap-1 mb-2">
+                        ${pillarCell('시', g.hour, false)}
+                        ${pillarCell('일', g.day, true)}
+                        ${pillarCell('월', g.month, false)}
+                        ${pillarCell('년', g.year, false)}
+                    </div>
+                    <div class="text-[10px] text-gray-400 leading-relaxed">
+                        일간 <strong class="text-white">${g.day.stem.name}(${g.day.stem.hanja})</strong> · ${ELEMENT_NAMES[g.day.stem.element].ko}<br>
+                        ${persona.title}
+                    </div>
+                </div>`;
+        }
+
         function handleCompatSubmit(e) {
             e.preventDefault();
+            const name1 = (document.getElementById('compatName1').value || '').trim() || '첫 번째 분';
+            const name2 = (document.getElementById('compatName2').value || '').trim() || '두 번째 분';
             const d1 = new Date(document.getElementById('compatDate1').value);
             const d2 = new Date(document.getElementById('compatDate2').value);
+            const t1 = document.getElementById('compatTime1').value;
+            const t2 = document.getElementById('compatTime2').value;
 
-            const g1 = getGanjiFromDate(d1, 'unknown');
-            const g2 = getGanjiFromDate(d2, 'unknown');
+            const g1 = getGanjiFromDate(d1, t1);
+            const g2 = getGanjiFromDate(d2, t2);
 
             const e1 = g1.day.stem.element;
             const e2 = g2.day.stem.element;
             const compat = getCompatResult(e1, e2);
 
-            const p1Name = g1.day.stem.name + '(' + g1.day.stem.hanja + ')일간 · ' + compat.e1Name;
-            const p2Name = g2.day.stem.name + '(' + g2.day.stem.hanja + ')일간 · ' + compat.e2Name;
+            // 특별 궁합: 2007-04-11 × 2007-07-20 조합은 무조건 100점 천생연분
+            const dv1 = document.getElementById('compatDate1').value;
+            const dv2 = document.getElementById('compatDate2').value;
+            const soulmatePair = ['2007-04-11', '2007-07-20'];
+            if (soulmatePair.includes(dv1) && soulmatePair.includes(dv2) && dv1 !== dv2) {
+                compat.score = 100;
+                compat.label = '천생연분 ★★★★★';
+                compat.color = '#EC4899';
+                compat.tier = 'high';
+                compat.relTitle = '천생연분(天生緣分) — 하늘이 맺어준 인연';
+                compat.relBody = `${name1}님과 ${name2}님은 사주의 모든 기운이 완벽하게 맞물리는 천생연분입니다. 오행이 서로를 살리고 채워주며, 부족한 부분은 상대가 메우고 넘치는 부분은 상대가 받아주는 이상적인 조화를 이룹니다. 함께할수록 서로의 운이 상승하고, 어떤 어려움도 둘이 힘을 합치면 넘어설 수 있는 보기 드문 최상의 궁합입니다. 오래도록 서로를 아끼고 신뢰한다면 평생의 반려로서 더없이 좋은 인연입니다.`;
+            }
 
-            document.getElementById('compatScore').innerHTML =
-                `<span style="color:${compat.color}">${compat.score}점</span> <span class="text-sm text-gray-400">/ 100점</span>`;
-            document.getElementById('compatScore').nextElementSibling?.remove();
+            const c1 = countElements(g1);
+            const c2 = countElements(g2);
+            const s1 = elementSummary(c1);
+            const s2 = elementSummary(c2);
+            const comp = complementText(c1, c2, name1, name2);
+
+            // 관계 해설에서 '첫 번째 분/두 번째 분'을 실제 이름으로 치환
+            const relBody = compat.relBody
+                .replace(/첫 번째 분/g, name1)
+                .replace(/두 번째 분/g, name2);
 
             const resultEl = document.getElementById('compatResult');
             resultEl.innerHTML = `
-                <span class="text-xs text-rose-300 font-semibold block mb-1">오행 궁합 조화도</span>
-                <div class="text-3xl font-bold my-2" style="color:${compat.color}">${compat.score}점 <span class="text-sm text-gray-400">/ 100점</span></div>
-                <div class="text-sm font-bold mb-3" style="color:${compat.color}">${compat.label}</div>
-                <div class="flex justify-center gap-4 text-xs text-gray-300 mb-3">
-                    <span class="px-3 py-1 rounded-full bg-white/10">${p1Name}</span>
-                    <span class="text-gray-500">×</span>
-                    <span class="px-3 py-1 rounded-full bg-white/10">${p2Name}</span>
+                <div class="text-center mb-4">
+                    <span class="text-xs text-rose-300 font-semibold block mb-1">사주 궁합 조화도</span>
+                    <div class="text-4xl font-bold my-1" style="color:${compat.color}">${compat.score}<span class="text-lg text-gray-400">점</span></div>
+                    <div class="text-sm font-bold" style="color:${compat.color}">${compat.label}</div>
                 </div>
-                <p class="text-xs text-gray-300 leading-relaxed text-left bg-white/5 rounded-xl p-4">${compat.desc}</p>
-                <p class="text-[10px] text-gray-500 mt-3">* 일주 천간의 오행 상생·상극 관계를 기준으로 산출한 참고 수치입니다.</p>
+
+                <div class="flex gap-3 mb-4">
+                    ${personBlock(name1, g1, 'text-sky-300')}
+                    ${personBlock(name2, g2, 'text-rose-300')}
+                </div>
+
+                <div class="rounded-2xl bg-white/5 border border-white/10 p-4 mb-3 text-left">
+                    <div class="text-xs font-bold text-white mb-2">🔮 ${compat.relTitle}</div>
+                    <p class="text-xs text-gray-300 leading-relaxed">${relBody}</p>
+                </div>
+
+                <div class="rounded-2xl bg-white/5 border border-white/10 p-4 mb-3 text-left">
+                    <div class="text-xs font-bold text-white mb-2">⚖️ 오행 분포 & 상호 보완</div>
+                    <p class="text-xs text-gray-300 leading-relaxed mb-2">
+                        ${name1}님은 <strong class="text-sky-300">${s1.topName}</strong> 기운이 가장 강하고(${s1.topCnt}개) ${s1.lowName} 기운이 약하며,
+                        ${name2}님은 <strong class="text-rose-300">${s2.topName}</strong> 기운이 가장 강하고(${s2.topCnt}개) ${s2.lowName} 기운이 약합니다.
+                    </p>
+                    <p class="text-xs text-gray-300 leading-relaxed">${comp}</p>
+                </div>
+
+                <div class="rounded-2xl bg-sky-900/15 border border-sky-700/25 p-4 mb-3 text-left">
+                    <div class="text-xs font-bold text-sky-300 mb-2">💡 관계를 위한 조언</div>
+                    <p class="text-xs text-gray-300 leading-relaxed">${COMPAT_ADVICE[compat.tier]}</p>
+                </div>
+
+                <p class="text-[10px] text-gray-500 text-center">* 일간 오행의 상생·상극 원리와 사주 원국의 오행 분포를 바탕으로 한 참고 분석입니다. 태어난 시간을 입력하면 시주까지 반영되어 더 정밀합니다.</p>
             `;
             resultEl.classList.remove('hidden');
+            resultEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
         function scrollToInput() {
